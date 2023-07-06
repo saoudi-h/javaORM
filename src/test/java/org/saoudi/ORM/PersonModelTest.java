@@ -1,4 +1,4 @@
-package org.saoudi.javaORM;
+package org.saoudi.ORM;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

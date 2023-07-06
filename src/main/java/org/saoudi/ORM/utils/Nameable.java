@@ -1,4 +1,4 @@
-package org.saoudi.javaORM.utils;
+package org.saoudi.ORM.utils;
 
 public interface Nameable {
     String getName();

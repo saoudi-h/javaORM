@@ -1,6 +1,6 @@
-package org.saoudi.javaORM.model;
+package org.saoudi.ORM.model;
 
-import org.saoudi.javaORM.utils.Nameable;
+import org.saoudi.ORM.utils.Nameable;
 
 import java.util.ArrayList;
 

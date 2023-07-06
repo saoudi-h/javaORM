@@ -1,4 +1,4 @@
-package org.saoudi.javaORM;
+package org.saoudi.ORM;
 
 public interface Identifiable {
 

@@ -1,4 +1,4 @@
-package org.saoudi.javaORM.model;
+package org.saoudi.ORM.model;
 
 public class Field {
     private String name;

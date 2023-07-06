@@ -1,4 +1,4 @@
-package org.saoudi.javaORM;
+package org.saoudi.ORM;
 
 import java.sql.*;
 import java.util.ArrayList;

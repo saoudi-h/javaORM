@@ -1,6 +1,6 @@
-package org.saoudi.javaORM.model;
+package org.saoudi.ORM.model;
 
-import org.saoudi.javaORM.utils.AbstractGenerator;
+import org.saoudi.ORM.utils.AbstractGenerator;
 
 
 public class ModelGenerator extends AbstractGenerator<Model> {

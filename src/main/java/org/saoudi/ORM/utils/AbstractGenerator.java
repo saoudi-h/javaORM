@@ -1,6 +1,4 @@
-package org.saoudi.javaORM.utils;
-
-import org.saoudi.javaORM.model.AbstractModel;
+package org.saoudi.ORM.utils;
 
 import java.io.*;
 import java.util.Properties;

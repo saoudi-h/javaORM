@@ -1,4 +1,4 @@
-package org.saoudi.javaORM.model;
+package org.saoudi.ORM.model;
 
 public abstract class AbstractModel {
     protected int id;
