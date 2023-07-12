@@ -1,6 +1,6 @@
-package org.saoudi.ORM.model;
+package com.saoudi.ORM.generator;
 
-public abstract class AbstractModel {
+public abstract class AbstractEntity {
     protected int id;
 
     public int getId() {
@@ -14,5 +14,6 @@ public abstract class AbstractModel {
     public abstract String toString();
 
     public abstract boolean equals(Object obj);
+
 
 }
