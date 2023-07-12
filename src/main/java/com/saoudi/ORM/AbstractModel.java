@@ -1,4 +1,4 @@
-package org.saoudi.ORM;
+package com.saoudi.ORM;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
