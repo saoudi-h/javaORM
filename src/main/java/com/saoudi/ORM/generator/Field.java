@@ -1,4 +1,4 @@
-package org.saoudi.ORM.model;
+package com.saoudi.ORM.generator;
 
 public class Field {
     private String name;
@@ -27,5 +27,15 @@ public class Field {
 
     public boolean isNullable() {
         return nullable;
+    }
+
+    @Override
+    public String toString() {
+        return "Field{" +
+                "name='" + name + '\'' +
+                ", type=" + type +
+                ", unique=" + unique +
+                ", nullable=" + nullable +
+                '}';
     }
 }
