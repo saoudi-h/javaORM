@@ -44,6 +44,11 @@ cd target
 java -jar javaUtils-1.0-SNAPSHOT.jar
 ```
 
+Utilisez le plugin exec-maven-plugin pour exécuter la classe principale du projet.
+```shell
+mvn exec:java
+
+```
 ## Licence
 
 Ce miniprojet est sous licence [MIT](https://opensource.org/licenses/MIT).

@@ -1,4 +1,4 @@
-package org.saoudi.ORM;
+package com.saoudi.ORM;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PersonModelTest {
+public class PersonSchemaTest {
     private PersonModel personModel = new PersonModel("person");
     private Person person;
     private Person person2;

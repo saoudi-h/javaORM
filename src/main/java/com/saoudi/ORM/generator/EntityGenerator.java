@@ -1,57 +1,109 @@
-package org.saoudi.ORM.model;
-
-import org.saoudi.ORM.utils.AbstractGenerator;
+package com.saoudi.ORM.generator;
 
 
-public class ModelGenerator extends AbstractGenerator<Model> {
+import java.util.Set;
+import java.util.TreeSet;
 
-    public ModelGenerator(Model obj, boolean force) {
+public class EntityGenerator extends AbstractGenerator<Schema> {
+
+    protected  String generatorName = "entity";
+    protected String packageName;
+
+    public EntityGenerator(Schema obj, boolean force) {
+
         super(obj, force);
+        this.packageName = setPackageName();
+
     }
 
-    public ModelGenerator(Model obj) {
+    public EntityGenerator(Schema obj) {
+
         super(obj);
+        this.packageName = setPackageName();
+
     }
 
     @Override
     protected void generate() {
-        Model model = obj;
 
         // Générer le code source de la classe
         generatePackageName();
-        generateClassDeclaration(model);
-        generateFields(model);
-        generateConstructors(model);
-        generateGettersAndSetters(model);
-        generateToString(model);
-        generateEquals(model);
+        generateImports();
+        generateClassDeclaration();
+        generateIdFieldsGettersSetters();
+        generateFields();
+        generateConstructors();
+        generateGettersAndSetters();
+        generateToString();
+        generateEquals();
         code.append("}");
     }
 
-    private void generateClassDeclaration(Model model) {
-        code.append("public class ").append(model.getName()).append(" extends AbstractModel {\n");
+    @Override
+    protected void generateImports() {
+        code.append("import com.saoudi.ORM.util.Identifiable;")
+            .append("\n\n");
+
+        // type fields import
+        TreeSet<String> importsTab = new TreeSet<>();
+        for (Field field : obj.getFields()) {
+            if(importClass(field.getType())){
+                importsTab.add(field.getType().getName());
+            }
+        }
+        for (String importLine : importsTab) {
+            code.append("import ").append(importLine).append(";\n");
+        }
+        code.append("\n\n");
     }
 
-    private void generateFields(Model model) {
-        for (Field field : model.getFields()) {
+    @Override
+    protected String getClassName() {
+        return getShemaClassName()+"Entity";
+    }
+
+    @Override
+    protected String getGeneratorName() {
+        return generatorName;
+    }
+
+    @Override
+    protected String getPackageName() {
+        return packageName;
+    }
+
+
+    private void generateIdFieldsGettersSetters(){
+        code.append("    private int id;")
+            .append("    public int getId() { return id;}")
+            .append("\n\n")
+            .append("    public void setId(int id) { this.id = id;}")
+            .append("\n\n");
+    }
+    private void generateClassDeclaration() {
+        code.append("public class ").append(getClassName()).append(" implements Identifiable {\n");
+    }
+
+    private void generateFields() {
+        for (Field field : obj.getFields()) {
             code.append("    private ").append(field.getType().getSimpleName()).append(" ").append(field.getName()).append(";\n");
         }
     }
 
-    private void generateConstructors(Model model) {
-        generateConstructorWithAllAttributes(model);
+    private void generateConstructors() {
+        generateConstructorWithAllAttributes();
         code.append("\n");
-        generateConstructorWithoutId(model);
+        generateConstructorWithoutId();
     }
 
-    private void generateConstructorWithAllAttributes(Model model) {
-        code.append("    public ").append(model.getName()).append("(");
+    private void generateConstructorWithAllAttributes() {
+        code.append("    public ").append(getClassName()).append("(");
 
         // id field
         code.append("int id");
         // Paramètres
-        for (int i = 0; i < model.getFields().size(); i++) {
-            Field field = model.getFields().get(i);
+        for (int i = 0; i < obj.getFields().size(); i++) {
+            Field field = obj.getFields().get(i);
             String fieldName = field.getName();
             String fieldType = field.getType().getSimpleName();
 
@@ -63,31 +115,31 @@ public class ModelGenerator extends AbstractGenerator<Model> {
         // id field
         code.append("         this.id = id;\n");
 
-        for (Field field : model.getFields()) {
+        for (Field field : obj.getFields()) {
             String fieldName = field.getName();
             code.append("        this.").append(fieldName).append(" = ").append(fieldName).append(";\n");
         }
         code.append("    }\n");
     }
 
-    private void generateConstructorWithoutId(Model model) {
-        code.append("    public ").append(model.getName()).append("(");
+    private void generateConstructorWithoutId() {
+        code.append("    public ").append(getClassName()).append("(");
 
         // Paramètres
-        for (int i = 0; i < model.getFields().size(); i++) {
-            Field field = model.getFields().get(i);
+        for (int i = 0; i < obj.getFields().size(); i++) {
+            Field field = obj.getFields().get(i);
             String fieldName = field.getName();
             String fieldType = field.getType().getSimpleName();
 
             code.append(fieldType).append(" ").append(fieldName);
-            if (i < model.getFields().size() - 1) {
+            if (i < obj.getFields().size() - 1) {
                 code.append(", ");
             }
         }
 
         code.append(") {\n");
 
-        for (Field field : model.getFields()) {
+        for (Field field : obj.getFields()) {
             String fieldName = field.getName();
             if (!fieldName.equals("id")) {
                 code.append("        this.").append(fieldName).append(" = ").append(fieldName).append(";\n");
@@ -98,8 +150,8 @@ public class ModelGenerator extends AbstractGenerator<Model> {
         code.append("    }\n");
     }
 
-    private void generateGettersAndSetters(Model model) {
-        for (Field field : model.getFields()) {
+    private void generateGettersAndSetters() {
+        for (Field field : obj.getFields()) {
             String fieldName = field.getName();
             String capitalizedFieldName = capitalize(field.getName());
             String fieldType = field.getType().getSimpleName();
@@ -116,12 +168,12 @@ public class ModelGenerator extends AbstractGenerator<Model> {
         }
     }
 
-    private void generateToString(Model model) {
+    private void generateToString() {
         code.append("    @Override\n");
         code.append("    public String toString() {\n");
-        code.append("        return \"").append(model.getName()).append("{\" +\n");
+        code.append("        return \"").append(getName()).append("{\" +\n");
 
-        for (Field field : model.getFields()) {
+        for (Field field : obj.getFields()) {
             String fieldName = field.getName();
             code.append("                \"").append(fieldName).append("='\" + ").append(fieldName).append(" + '\\'' +\n");
         }
@@ -131,27 +183,19 @@ public class ModelGenerator extends AbstractGenerator<Model> {
         code.append("    }\n");
     }
 
-    private void generateEquals(Model model) {
+    private void generateEquals() {
         code.append("    @Override\n");
         code.append("    public boolean equals(Object obj) {\n");
         code.append("        if (this == obj) return true;\n");
         code.append("        if (obj == null || getClass() != obj.getClass()) return false;\n");
-        code.append("        ").append(model.getName()).append(" other = (").append(model.getName()).append(") obj;\n");
+        code.append("        ").append(getClassName()).append(" other = (").append(getClassName()).append(") obj;\n");
 
-        for (Field field : model.getFields()) {
+        for (Field field : obj.getFields()) {
             String fieldName = field.getName();
             code.append("        if (").append(fieldName).append(" != null ? !").append(fieldName).append(".equals(other.").append(fieldName).append(") : other.").append(fieldName).append(" != null) return false;\n");
         }
 
         code.append("        return id == other.id;\n");
         code.append("    }\n");
-    }
-
-    public static void main(String[] args) {
-        Model model = new Model("Voiture");
-        model.add(new Field("marque", String.class, false, true));
-        model.add(new Field("modele", String.class, false, true));
-        ModelGenerator generator = new ModelGenerator(model,true);
-        generator.generateAndSave();
     }
 }

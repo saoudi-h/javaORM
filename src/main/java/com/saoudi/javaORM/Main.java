@@ -1,4 +1,4 @@
-package org.saoudi.javaORM;
+package com.saoudi.javaORM;
 
 import java.sql.*;
 import static com.saoudi.javaUtils.ConsoleColor.*;
@@ -16,9 +16,9 @@ public class Main {
 
 //    public static void userModelExamples() throws SQLException {
 //        /////////////////////////////////////////////////////////////////////////////////////
-//        // Exemples d'utilisation de notre Model User
+//        // Exemples d'utilisation de notre Schema User
 //        /////////////////////////////////////////////////////////////////////////////////////
-//        printBigTitleBox("Exemples d'utilisation de notre Model User");
+//        printBigTitleBox("Exemples d'utilisation de notre Schema User");
 //
 //
 //        /////////////////////////////////////////////////////////////////////////////////////
